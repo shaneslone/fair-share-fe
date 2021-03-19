@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, Typography } from '@material-ui/core';
+import { TextField, Button, Typography, Box } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,7 +33,7 @@ export default function Login() {
         {
           headers: {
             // btoa is converting our client id/client secret into base64
-            Authorization: `Basic ${btoa('lambda-client:lambda-secret')}`,
+            Authorization: `Basic ${btoa(process.env.REACT_APP_CLIENT_INFO)}`,
             'Content-Type': 'application/x-www-form-urlencoded',
           },
         }
@@ -46,10 +46,11 @@ export default function Login() {
         console.log(err.message);
       });
   };
+
   return (
     <form className={classes.root} noValidate autoComplete='off'>
       <Typography>Login</Typography>
-      <div>
+      <Box>
         <TextField
           id='username'
           variant='outlined'
@@ -57,8 +58,8 @@ export default function Login() {
           value={credentials.username}
           onChange={onChange}
         />
-      </div>
-      <div>
+      </Box>
+      <Box>
         <TextField
           id='password'
           variant='outlined'
@@ -67,7 +68,7 @@ export default function Login() {
           onChange={onChange}
           type='password'
         />
-      </div>
+      </Box>
       <Button variant='contained' color='primary' onClick={onSubmit}>
         Submit
       </Button>

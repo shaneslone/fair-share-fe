@@ -5,6 +5,7 @@ import { UserContext } from './context/UserContext';
 import Header from './components/Header';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import Bill from './components/Bill';
 
 import { Grid } from '@material-ui/core';
 
@@ -17,16 +18,17 @@ function App() {
         <Header />
       </Grid>
       <Grid item container>
-        <Grid item xs={2} sm={5} />
-        <Grid item xs={8} sm={2}>
+        <Grid item xs={false} sm={2} />
+        <Grid item xs={12} sm={8}>
           <UserContext.Provider value={{ userInfo, setUserInfo }}>
             <Switch>
               <Route path='/signup' component={Signup} />
-              <Route path='/' component={Login} />
+              <Route path='/bill' component={Bill} />
+              <Route exact path='/' component={Login} />
             </Switch>
           </UserContext.Provider>
         </Grid>
-        <Grid item xs={2} sm={5} />
+        <Grid item xs={false} sm={2} />
       </Grid>
     </Grid>
   );
