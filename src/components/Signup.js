@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { TextField, Button, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,7 +21,7 @@ const initalValues = {
 };
 
 export default function Signup() {
-  const classes = useState();
+  const classes = useStyles();
 
   const [user, setUser] = useState(initalValues);
 
@@ -40,6 +39,7 @@ export default function Signup() {
 
   return (
     <form className={classes.root} noValidate autoComplete='off'>
+      <Typography>Sign Up</Typography>
       <div>
         <TextField
           id='username'

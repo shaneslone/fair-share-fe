@@ -1,16 +1,15 @@
 import React from 'react';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { makeStyles } from '@material-ui/styles';
+import { Link } from 'react-router-dom';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   list: {
     width: 250,
+  },
+  link: {
+    textDecoration: 'none',
   },
 }));
 
@@ -23,25 +22,20 @@ export default function NavMenu({ toggleDrawer }) {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
+        <Link to='/signup' className={classes.link}>
+          <ListItem button>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              <PersonAddIcon />
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText primary={'Sign Up'} />
           </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        </Link>
+        <ListItem button>
+          <ListItemIcon>
+            <PersonAddIcon />
+          </ListItemIcon>
+          <ListItemText primary={'Log In'} />
+        </ListItem>
       </List>
     </div>
   );

@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { TextField, Button, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -13,14 +12,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const initalValues = {
+  username: '',
+  password: '',
+};
+
 export default function Login() {
   const classes = useStyles();
-  const initalValues = {
-    username: '',
-    password: '',
-  };
   const [credentials, setCredentials] = useState(initalValues);
-
   const onChange = e => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
   };
@@ -49,6 +48,7 @@ export default function Login() {
   };
   return (
     <form className={classes.root} noValidate autoComplete='off'>
+      <Typography>Login</Typography>
       <div>
         <TextField
           id='username'
@@ -56,7 +56,6 @@ export default function Login() {
           label='Username'
           value={credentials.username}
           onChange={onChange}
-          helperText='Please enter your username'
         />
       </div>
       <div>
@@ -67,7 +66,6 @@ export default function Login() {
           value={credentials.password}
           onChange={onChange}
           type='password'
-          helperText='Please enter your password'
         />
       </div>
       <Button variant='contained' color='primary' onClick={onSubmit}>

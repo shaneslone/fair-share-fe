@@ -30,7 +30,9 @@ export default function Header() {
   return (
     <AppBar position='static'>
       <Toolbar>
-        <Typography className={classes.typographyStyles}>Fair Share</Typography>
+        <Typography className={classes.typographyStyles} component='h1'>
+          Fair Share
+        </Typography>
         <IconButton
           edge='start'
           color='inherit'
