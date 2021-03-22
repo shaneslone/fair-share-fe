@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Box } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,6 +19,7 @@ const initalValues = {
 };
 
 export default function Login() {
+  const { push } = useHistory();
   const classes = useStyles();
   const [credentials, setCredentials] = useState(initalValues);
   const onChange = e => {
@@ -41,6 +43,7 @@ export default function Login() {
       .then(res => {
         localStorage.setItem('token', res.data.access_token);
         setCredentials(initalValues);
+        push('/dashboard');
       })
       .catch(err => {
         console.log(err.message);

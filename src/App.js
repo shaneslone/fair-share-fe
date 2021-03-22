@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { UserContext } from './context/UserContext';
 
+import PrivateRoute from './components/PrivateRoute';
 import Header from './components/Header';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Bill from './components/Bill';
+import Dashboard from './components/Dashboard';
 
 import { Grid } from '@material-ui/core';
 
@@ -23,7 +24,7 @@ function App() {
           <UserContext.Provider value={{ userInfo, setUserInfo }}>
             <Switch>
               <Route path='/signup' component={Signup} />
-              <Route path='/bill' component={Bill} />
+              <PrivateRoute path='/dashboard' component={Dashboard} />
               <Route exact path='/' component={Login} />
             </Switch>
           </UserContext.Provider>
