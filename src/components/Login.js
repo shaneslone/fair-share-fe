@@ -1,11 +1,20 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, Typography, Box } from '@material-ui/core';
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Container,
+} from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    // display: 'flex',
+    // flexDirection: 'column',
+    // alignItems: 'center',
     '& > *': {
       margin: theme.spacing(1),
       width: '25ch',
@@ -54,30 +63,37 @@ export default function Login() {
   };
 
   return (
-    <form className={classes.root} noValidate autoComplete='off'>
-      <Typography>Login</Typography>
-      <Box>
-        <TextField
-          id='username'
-          variant='outlined'
-          label='Username'
-          value={credentials.username}
-          onChange={onChange}
-        />
-      </Box>
-      <Box>
-        <TextField
-          id='password'
-          variant='outlined'
-          label='Password'
-          value={credentials.password}
-          onChange={onChange}
-          type='password'
-        />
-      </Box>
-      <Button variant='contained' color='primary' onClick={onSubmit}>
-        Submit
-      </Button>
-    </form>
+    <Container>
+      <form className={classes.root} noValidate autoComplete='off'>
+        <Typography>Login</Typography>
+        <Box>
+          <TextField
+            id='username'
+            variant='outlined'
+            label='Username'
+            value={credentials.username}
+            onChange={onChange}
+          />
+        </Box>
+        <Box>
+          <TextField
+            id='password'
+            variant='outlined'
+            label='Password'
+            value={credentials.password}
+            onChange={onChange}
+            type='password'
+          />
+        </Box>
+        <Button
+          type='submit'
+          variant='contained'
+          color='primary'
+          onClick={onSubmit}
+        >
+          Submit
+        </Button>
+      </form>
+    </Container>
   );
 }

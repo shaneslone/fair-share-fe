@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, Typography } from '@material-ui/core';
+import { TextField, Button, Typography, Box } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     '& > *': {
       margin: theme.spacing(1),
       width: '25ch',
@@ -40,7 +43,7 @@ export default function Signup() {
   return (
     <form className={classes.root} noValidate autoComplete='off'>
       <Typography>Sign Up</Typography>
-      <div>
+      <Box>
         <TextField
           id='username'
           variant='outlined'
@@ -49,8 +52,8 @@ export default function Signup() {
           onChange={onChange}
           helperText='Please enter your username'
         />
-      </div>
-      <div>
+      </Box>
+      <Box>
         <TextField
           id='password'
           variant='outlined'
@@ -60,8 +63,8 @@ export default function Signup() {
           type='password'
           helperText='Please enter your password'
         />
-      </div>
-      <div>
+      </Box>
+      <Box>
         <TextField
           id='email'
           variant='outlined'
@@ -70,8 +73,8 @@ export default function Signup() {
           onChange={onChange}
           helperText='Please enter your username'
         />
-      </div>
-      <div>
+      </Box>
+      <Box>
         <TextField
           id='firstName'
           variant='outlined'
@@ -80,8 +83,8 @@ export default function Signup() {
           onChange={onChange}
           helperText='Please enter your First Name'
         />
-      </div>
-      <div>
+      </Box>
+      <Box>
         <TextField
           id='lastName'
           variant='outlined'
@@ -90,8 +93,13 @@ export default function Signup() {
           onChange={onChange}
           helperText='Please enter your Last Name'
         />
-      </div>
-      <Button variant='contained' color='primary' onClick={onSubmit}>
+      </Box>
+      <Button
+        type='submit'
+        variant='contained'
+        color='primary'
+        onClick={onSubmit}
+      >
         Submit
       </Button>
     </form>

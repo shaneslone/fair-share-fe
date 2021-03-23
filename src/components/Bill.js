@@ -22,7 +22,6 @@ const useStyles = makeStyles({
 export default function Bill(props) {
   const [bill, setBill] = useState(props.bill);
   const dueDate = new Date(bill.dueDate);
-  console.log(!bill.isPaid);
   const classes = useStyles();
   const onChange = () => {
     axiosWithAuth()
