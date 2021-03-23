@@ -11,6 +11,7 @@ import {
   Link,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 const useStyles = makeStyles({
   root: {
@@ -21,9 +22,18 @@ const useStyles = makeStyles({
 export default function Bill(props) {
   const [bill, setBill] = useState(props.bill);
   const dueDate = new Date(bill.dueDate);
+  console.log(!bill.isPaid);
   const classes = useStyles();
-  const onChange = e => {
-    setBill({ ...bill, [e.target.id]: e.target.checked });
+  const onChange = () => {
+    axiosWithAuth()
+      .patch(`bills/bill/${bill.billid}/updatepaid`, { isPaid: !bill.isPaid })
+      .then(() => {
+        console.log('updated');
+        setBill({ ...bill, isPaid: !bill.isPaid });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
   return (
     <Accordion className={classes.root}>
