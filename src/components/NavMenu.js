@@ -1,4 +1,4 @@
-import React from 'react';
+import { useContext } from 'react';
 import {
   List,
   ListItem,
@@ -9,7 +9,9 @@ import {
 } from '@material-ui/core';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles } from '@material-ui/styles';
+import { UserContext } from '../context/UserContext';
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -19,12 +21,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavMenu({ toggleDrawer }) {
   const classes = useStyles();
-  return (
-    <Box
-      className={classes.list}
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
+  const { userInfo } = useContext(UserContext);
+  const notLoggedIn = () => {
+    return (
       <List>
         <Link href='/signup' color='inherit'>
           <ListItem button>
@@ -43,6 +42,31 @@ export default function NavMenu({ toggleDrawer }) {
           </ListItem>
         </Link>
       </List>
+    );
+  };
+
+  const loggedIn = () => {
+    return (
+      <List>
+        <Link href='/login' color='inherit'>
+          <ListItem button>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Logout'} />
+          </ListItem>
+        </Link>
+      </List>
+    );
+  };
+
+  return (
+    <Box
+      className={classes.list}
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      {userInfo ? loggedIn() : notLoggedIn()}
     </Box>
   );
 }

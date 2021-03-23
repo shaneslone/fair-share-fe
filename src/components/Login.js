@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Box } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
@@ -19,6 +19,9 @@ const initalValues = {
 };
 
 export default function Login() {
+  useEffect(() => {
+    localStorage.removeItem('token');
+  }, []);
   const { push } = useHistory();
   const classes = useStyles();
   const [credentials, setCredentials] = useState(initalValues);

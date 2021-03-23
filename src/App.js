@@ -14,24 +14,25 @@ function App() {
   const [userInfo, setUserInfo] = useState(null);
 
   return (
-    <Grid container direction='column'>
-      <Grid item>
-        <Header />
-      </Grid>
-      <Grid item container>
-        <Grid item xs={false} sm={2} />
-        <Grid item xs={12} sm={8}>
-          <UserContext.Provider value={{ userInfo, setUserInfo }}>
+    <UserContext.Provider value={{ userInfo, setUserInfo }}>
+      <Grid container direction='column'>
+        <Grid item>
+          <Header />
+        </Grid>
+        <Grid item container>
+          <Grid item xs={false} sm={2} />
+          <Grid item xs={12} sm={8}>
             <Switch>
               <Route path='/signup' component={Signup} />
+              <Route path='/login' component={Login} />
               <PrivateRoute path='/dashboard' component={Dashboard} />
               <Route exact path='/' component={Login} />
             </Switch>
-          </UserContext.Provider>
+          </Grid>
+          <Grid item xs={false} sm={2} />
         </Grid>
-        <Grid item xs={false} sm={2} />
       </Grid>
-    </Grid>
+    </UserContext.Provider>
   );
 }
 
