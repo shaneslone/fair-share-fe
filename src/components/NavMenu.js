@@ -33,7 +33,7 @@ export default function NavMenu({ toggleDrawer }) {
             <ListItemText primary={'Sign Up'} />
           </ListItem>
         </Link>
-        <Link href='/' color='inherit'>
+        <Link href='/login' color='inherit'>
           <ListItem button>
             <ListItemIcon>
               <VpnKeyIcon />

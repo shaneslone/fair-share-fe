@@ -45,9 +45,11 @@ const initialValues = {
   website: '',
 };
 
-export default function BillForm() {
+export default function BillForm({ toggleModal }) {
   const classes = useStyles();
-  const { currentMonthlyBill } = useContext(MonthlyBillContext);
+  const { currentMonthlyBill, setCurrentMonthlyBill } = useContext(
+    MonthlyBillContext
+  );
   const [formValues, setFormValues] = useState(initialValues);
 
   const onChange = e => {
@@ -71,7 +73,11 @@ export default function BillForm() {
     axiosWithAuth()
       .post('/bills/bill', newBill)
       .then(res => {
-        console.log(res);
+        setCurrentMonthlyBill({
+          ...currentMonthlyBill,
+          bills: [...currentMonthlyBill.bills, res.data],
+        });
+        toggleModal();
       })
       .catch(err => {
         console.log(err.message);

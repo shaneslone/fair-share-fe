@@ -8,7 +8,6 @@ import Header from './components/Header';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
-import BillForm from './components/forms/BillForm';
 
 import { Grid } from '@material-ui/core';
 
@@ -32,7 +31,7 @@ function App() {
                 <Route path='/signup' component={Signup} />
                 <Route path='/login' component={Login} />
                 <PrivateRoute path='/dashboard' component={Dashboard} />
-                <Route exact path='/' component={BillForm} />
+                <Route exact path='/' component={Login} />
               </Switch>
             </Grid>
             <Grid item xs={false} sm={2} />

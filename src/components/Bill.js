@@ -54,6 +54,7 @@ export default function Bill(props) {
       </AccordionSummary>
       <AccordionDetails>
         <Box>
+          <Typography color='textSecondary'>{bill.type}</Typography>
           <Link href={bill.website} color='textSecondary'>
             {bill.website}
           </Link>
