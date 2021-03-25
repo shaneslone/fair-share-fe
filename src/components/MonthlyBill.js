@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function MonthlyBill({ monthlyBill }) {
   const classes = useStyles();
-  const [modalStyle] = useState(getModalStyle);
+  const [modalStyle] = useState(getModalStyle());
   const [open, setOpen] = useState(false);
   const toggleModal = () => {
     setOpen(!open);
@@ -49,6 +49,7 @@ export default function MonthlyBill({ monthlyBill }) {
       <BillForm toggleModal={toggleModal} currentMonthlyBill={monthlyBill} />
     </div>
   );
+
   return (
     <Box className={classes.root}>
       {monthlyBill.bills.map(bill => (

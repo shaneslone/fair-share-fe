@@ -1,5 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { HouseholdContext } from '../context/HouseholdContext.js';
+
 import {
   Accordion,
   AccordionSummary,
@@ -10,26 +11,62 @@ import {
   makeStyles,
   Box,
   Link,
+  IconButton,
+  Button,
+  Modal,
 } from '@material-ui/core';
+
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 
-const useStyles = makeStyles({
+function rand() {
+  return Math.round(Math.random() * 20) - 10;
+}
+
+function getModalStyle() {
+  const top = 50 + rand();
+  const left = 50 + rand();
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
+const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
   },
-});
+  paper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
 
 export default function Bill({ bill, currentMonthlyBill }) {
   const dueDate = new Date(bill.dueDate);
   const classes = useStyles();
   const { household, setHousehold } = useContext(HouseholdContext);
+  const [modalStyle] = useState(getModalStyle());
+  const [open, setOpen] = useState(false);
+
+  const toggleModal = () => {
+    setOpen(!open);
+  };
+
   const onChange = () => {
     axiosWithAuth()
       .patch(`bills/bill/${bill.billid}/updatepaid`, { isPaid: !bill.isPaid })
       .then(res => {
         const updatedBill = res.data;
-        console.log(updatedBill);
         setHousehold({
           ...household,
           monthlyBills: household.monthlyBills.map(monthlyBill => {
@@ -52,6 +89,48 @@ export default function Bill({ bill, currentMonthlyBill }) {
         console.log(err);
       });
   };
+
+  const deleteBill = () => {
+    axiosWithAuth()
+      .delete(`bills/bill/${bill.billid}`)
+      .then(() => {
+        setHousehold({
+          ...household,
+          monthlyBills: household.monthlyBills.map(monthlyBill => {
+            if (monthlyBill.monthlybillid == currentMonthlyBill.monthlybillid) {
+              return {
+                ...monthlyBill,
+                bills: monthlyBill.bills.filter(
+                  currentBill => currentBill.billid != bill.billid
+                ),
+              };
+            }
+            return monthlyBill;
+          }),
+        });
+        toggleModal();
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  };
+
+  const body = (
+    <div style={modalStyle} className={classes.paper}>
+      <Box>
+        <Typography>Are you sure you want to delete this bill?</Typography>
+        <Button
+          type='submit'
+          variant='contained'
+          color='primary'
+          onClick={deleteBill}
+        >
+          Confirm Delete
+        </Button>
+      </Box>
+    </div>
+  );
+
   return (
     <Accordion className={classes.root}>
       <AccordionSummary
@@ -80,8 +159,27 @@ export default function Bill({ bill, currentMonthlyBill }) {
           <Typography color='textSecondary'>
             Due: {dueDate.toDateString()}
           </Typography>
+          <IconButton
+            edge='start'
+            color='inherit'
+            aria-label='delete'
+            onClick={toggleModal}
+          >
+            <DeleteIcon />
+          </IconButton>
+          <IconButton edge='start' color='inherit' aria-label='edit'>
+            <EditIcon />
+          </IconButton>
         </Box>
       </AccordionDetails>
+      <Modal
+        open={open}
+        onClose={toggleModal}
+        aria-labelledby='delete bill'
+        aria-describedby='delete a new bill'
+      >
+        {body}
+      </Modal>
     </Accordion>
   );
 }

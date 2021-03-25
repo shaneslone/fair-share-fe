@@ -45,10 +45,16 @@ const initialValues = {
   website: '',
 };
 
-export default function BillForm({ toggleModal, currentMonthlyBill }) {
+export default function BillForm({
+  toggleModal,
+  currentMonthlyBill,
+  billToEdit,
+}) {
   const classes = useStyles();
   const { household, setHousehold } = useContext(HouseholdContext);
-  const [formValues, setFormValues] = useState(initialValues);
+  const [formValues, setFormValues] = useState(
+    billToEdit ? billToEdit : initialValues
+  );
 
   const onChange = e => {
     const { id, value, checked, type } = e.target;
