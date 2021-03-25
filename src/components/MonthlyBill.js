@@ -46,13 +46,13 @@ export default function MonthlyBill({ monthlyBill }) {
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <BillForm toggleModal={toggleModal} />
+      <BillForm toggleModal={toggleModal} currentMonthlyBill={monthlyBill} />
     </div>
   );
   return (
     <Box className={classes.root}>
       {monthlyBill.bills.map(bill => (
-        <Bill bill={bill} key={bill.billid} />
+        <Bill bill={bill} key={bill.billid} currentMonthlyBill={monthlyBill} />
       ))}
       <Button variant='contained' color='primary' onClick={toggleModal}>
         Add Bill

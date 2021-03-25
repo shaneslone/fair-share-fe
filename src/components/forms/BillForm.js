@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { HouseholdContext } from '../../context/HouseholdContext';
 import {
   TextField,
   Button,
@@ -12,7 +13,6 @@ import {
   Checkbox,
 } from '@material-ui/core';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import { MonthlyBillContext } from '../../context/MonthlyBillContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,11 +45,9 @@ const initialValues = {
   website: '',
 };
 
-export default function BillForm({ toggleModal }) {
+export default function BillForm({ toggleModal, currentMonthlyBill }) {
   const classes = useStyles();
-  const { currentMonthlyBill, setCurrentMonthlyBill } = useContext(
-    MonthlyBillContext
-  );
+  const { household, setHousehold } = useContext(HouseholdContext);
   const [formValues, setFormValues] = useState(initialValues);
 
   const onChange = e => {
@@ -73,9 +71,19 @@ export default function BillForm({ toggleModal }) {
     axiosWithAuth()
       .post('/bills/bill', newBill)
       .then(res => {
-        setCurrentMonthlyBill({
-          ...currentMonthlyBill,
-          bills: [...currentMonthlyBill.bills, res.data],
+        setHousehold({
+          ...household,
+          monthlyBills: household.monthlyBills.map(monthlyBill => {
+            if (
+              monthlyBill.monthlybillid === currentMonthlyBill.monthlybillid
+            ) {
+              return {
+                ...monthlyBill,
+                bills: [...monthlyBill.bills, res.data],
+              };
+            }
+            return monthlyBill;
+          }),
         });
         toggleModal();
       })

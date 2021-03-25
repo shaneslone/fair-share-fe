@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { UserContext } from '../context/UserContext';
-import { MonthlyBillContext } from '../context/MonthlyBillContext';
+import { HouseholdContext } from '../context/HouseholdContext.js';
 import {
   Box,
   Typography,
@@ -32,9 +32,7 @@ export default function Dashboard() {
   const { setUserInfo } = useContext(UserContext);
   const [household, setHousehold] = useState(null);
   const [currentMonth, setCurrentMonth] = useState('');
-  const { currentMonthlyBill, setCurrentMonthlyBill } = useContext(
-    MonthlyBillContext
-  );
+  const [currentMonthlyBill, setCurrentMonthlyBill] = useState(null);
 
   useEffect(() => {
     axiosWithAuth()
@@ -62,6 +60,17 @@ export default function Dashboard() {
     );
   };
 
+  useEffect(() => {
+    if (currentMonthlyBill) {
+      setCurrentMonthlyBill(
+        household.monthlyBills.filter(
+          monthlyBill =>
+            monthlyBill.monthlybillid === currentMonthlyBill.monthlybillid
+        )[0]
+      );
+    }
+  }, [household]);
+
   const months = [
     'January',
     'February',
@@ -78,38 +87,40 @@ export default function Dashboard() {
   ];
 
   return (
-    <Box className={classes.root}>
-      <Typography>Select Bills</Typography>
-      <FormControl variant='outlined' className={classes.formControl}>
-        <InputLabel htmlFor='outlined-currentMonth-native-simple'>
-          Month
-        </InputLabel>
-        <Select
-          native
-          value={currentMonth}
-          onChange={handleChange}
-          label='Select Month'
-          inputProps={{
-            name: 'currentMonth',
-            id: 'outlined-currentMonth-native-simple',
-          }}
-        >
-          <option aria-label='None' value='' />
-          {household &&
-            household.monthlyBills.map(monthlyBill => {
-              const date = new Date(monthlyBill.date);
-              return (
-                <option
-                  key={monthlyBill.monthlybillid}
-                  value={monthlyBill.monthlybillid}
-                >
-                  {`${months[date.getMonth()]} ${date.getFullYear()}`}
-                </option>
-              );
-            })}
-        </Select>
-      </FormControl>
-      {currentMonthlyBill && <MonthlyBill monthlyBill={currentMonthlyBill} />}
-    </Box>
+    <HouseholdContext.Provider value={{ household, setHousehold }}>
+      <Box className={classes.root}>
+        <Typography>Select Bills</Typography>
+        <FormControl variant='outlined' className={classes.formControl}>
+          <InputLabel htmlFor='outlined-currentMonth-native-simple'>
+            Month
+          </InputLabel>
+          <Select
+            native
+            value={currentMonth}
+            onChange={handleChange}
+            label='Select Month'
+            inputProps={{
+              name: 'currentMonth',
+              id: 'outlined-currentMonth-native-simple',
+            }}
+          >
+            <option aria-label='None' value='' />
+            {household &&
+              household.monthlyBills.map(monthlyBill => {
+                const date = new Date(monthlyBill.date);
+                return (
+                  <option
+                    key={monthlyBill.monthlybillid}
+                    value={monthlyBill.monthlybillid}
+                  >
+                    {`${months[date.getMonth()]} ${date.getFullYear()}`}
+                  </option>
+                );
+              })}
+          </Select>
+        </FormControl>
+        {currentMonthlyBill && <MonthlyBill monthlyBill={currentMonthlyBill} />}
+      </Box>
+    </HouseholdContext.Provider>
   );
 }

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext } from 'react';
+import { HouseholdContext } from '../context/HouseholdContext.js';
 import {
   Accordion,
   AccordionSummary,
@@ -19,16 +20,33 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Bill(props) {
-  const [bill, setBill] = useState(props.bill);
+export default function Bill({ bill, currentMonthlyBill }) {
   const dueDate = new Date(bill.dueDate);
   const classes = useStyles();
+  const { household, setHousehold } = useContext(HouseholdContext);
   const onChange = () => {
     axiosWithAuth()
       .patch(`bills/bill/${bill.billid}/updatepaid`, { isPaid: !bill.isPaid })
-      .then(() => {
-        console.log('updated');
-        setBill({ ...bill, isPaid: !bill.isPaid });
+      .then(res => {
+        const updatedBill = res.data;
+        console.log(updatedBill);
+        setHousehold({
+          ...household,
+          monthlyBills: household.monthlyBills.map(monthlyBill => {
+            if (monthlyBill.monthlybillid == currentMonthlyBill.monthlybillid) {
+              return {
+                ...monthlyBill,
+                bills: monthlyBill.bills.map(bill => {
+                  if (bill.billid === updatedBill.billid) {
+                    return updatedBill;
+                  }
+                  return bill;
+                }),
+              };
+            }
+            return monthlyBill;
+          }),
+        });
       })
       .catch(err => {
         console.log(err);
