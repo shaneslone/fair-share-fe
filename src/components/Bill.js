@@ -64,7 +64,9 @@ export default function Bill({ bill, currentMonthlyBill }) {
         setHousehold({
           ...household,
           monthlyBills: household.monthlyBills.map(monthlyBill => {
-            if (monthlyBill.monthlybillid == currentMonthlyBill.monthlybillid) {
+            if (
+              monthlyBill.monthlybillid === currentMonthlyBill.monthlybillid
+            ) {
               return {
                 ...monthlyBill,
                 bills: monthlyBill.bills.map(bill => {
@@ -91,11 +93,13 @@ export default function Bill({ bill, currentMonthlyBill }) {
         setHousehold({
           ...household,
           monthlyBills: household.monthlyBills.map(monthlyBill => {
-            if (monthlyBill.monthlybillid == currentMonthlyBill.monthlybillid) {
+            if (
+              monthlyBill.monthlybillid === currentMonthlyBill.monthlybillid
+            ) {
               return {
                 ...monthlyBill,
                 bills: monthlyBill.bills.filter(
-                  currentBill => currentBill.billid != bill.billid
+                  currentBill => currentBill.billid !== bill.billid
                 ),
               };
             }

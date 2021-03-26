@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Typography, Modal, Button } from '@material-ui/core';
+import { Box, Modal, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Bill from './Bill';
@@ -34,6 +34,9 @@ const useStyles = makeStyles(theme => ({
     top: '50%',
     transform: 'translate(-50%, -50%)',
   },
+  button: {
+    margin: theme.spacing(2),
+  },
 }));
 
 export default function MonthlyBill({ monthlyBill }) {
@@ -55,7 +58,12 @@ export default function MonthlyBill({ monthlyBill }) {
       {monthlyBill.bills.map(bill => (
         <Bill bill={bill} key={bill.billid} currentMonthlyBill={monthlyBill} />
       ))}
-      <Button variant='contained' color='primary' onClick={toggleModal}>
+      <Button
+        variant='contained'
+        color='primary'
+        onClick={toggleModal}
+        className={classes.button}
+      >
         Add Bill
       </Button>
       <Modal

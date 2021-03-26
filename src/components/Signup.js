@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
+import { useState, useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Box } from '@material-ui/core';
 
@@ -23,10 +25,13 @@ const initalValues = {
   lastName: '',
 };
 
-export default function Signup() {
+export default function Signup({ toggleModal }) {
   const classes = useStyles();
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
-  const [user, setUser] = useState(initalValues);
+  const [user, setUser] = useState(
+    userInfo ? { ...userInfo, password: '' } : initalValues
+  );
 
   const onChange = e => {
     setUser({ ...user, [e.target.id]: e.target.value });
@@ -34,15 +39,27 @@ export default function Signup() {
 
   const onSubmit = e => {
     e.preventDefault();
-    axios
-      .post('http://localhost:2019/createnewuser', user)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+    if (userInfo) {
+      axiosWithAuth()
+        .patch(`/users/user/${userInfo.userId}`, user)
+        .then(res => {
+          setUserInfo(res.data);
+          toggleModal();
+        })
+        .catch(err => {
+          console.log(err.message);
+        });
+    } else {
+      axios
+        .post('http://localhost:2019/createnewuser', user)
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
   };
 
   return (
     <form className={classes.root} noValidate autoComplete='off'>
-      <Typography>Sign Up</Typography>
+      <Typography>{userInfo ? 'Edit Your Info' : 'Sign Up'}</Typography>
       <Box>
         <TextField
           id='username'

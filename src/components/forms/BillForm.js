@@ -4,7 +4,6 @@ import { HouseholdContext } from '../../context/HouseholdContext';
 import {
   TextField,
   Button,
-  Typography,
   Box,
   FormControl,
   FormControlLabel,
@@ -32,8 +31,6 @@ const useStyles = makeStyles(theme => ({
     },
   },
 }));
-
-const today = new Date();
 
 const initialValues = {
   amount: 0,

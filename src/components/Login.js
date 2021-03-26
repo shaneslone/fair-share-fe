@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Box } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
@@ -22,9 +23,12 @@ const initalValues = {
 };
 
 export default function Login() {
+  const { setUserInfo } = useContext(UserContext);
+
   useEffect(() => {
     localStorage.removeItem('token');
-  }, []);
+    setUserInfo(null);
+  }, [setUserInfo]);
   const { push } = useHistory();
   const classes = useStyles();
   const [credentials, setCredentials] = useState(initalValues);
