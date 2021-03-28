@@ -92,7 +92,10 @@ export default function Dashboard() {
   return (
     <HouseholdContext.Provider value={{ household, setHousehold }}>
       <Box className={classes.root}>
-        <UserCard userInfo={userInfo} />
+        {household &&
+          household.users.map(user => (
+            <UserCard userInfo={user} key={user.userId} />
+          ))}
         <Typography>Select Bills</Typography>
         <FormControl variant='outlined' className={classes.formControl}>
           <InputLabel htmlFor='outlined-currentMonth-native-simple'>
