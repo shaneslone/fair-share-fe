@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 import Signup from './Signup';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -22,7 +23,8 @@ function getModalStyle() {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
+    width: '50%',
+    margin: theme.spacing(2),
   },
   paper: {
     position: 'absolute',
@@ -34,10 +36,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function UserCard({ userInfo }) {
+export default function UserCard({ user }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [modalStyle] = useState(getModalStyle());
+  const { userInfo } = useContext(UserContext);
+
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -50,21 +54,23 @@ export default function UserCard({ userInfo }) {
 
   if (!userInfo) return 'Loading...';
   return (
-    <Card>
+    <Card className={classes.root}>
       <CardContent>
-        <Typography>{userInfo.username.toUpperCase()}</Typography>
-        <Typography>{`${userInfo.firstName} ${userInfo.lastName}`}</Typography>
-        <Typography>{userInfo.email}</Typography>
+        <Typography>{user.username.toUpperCase()}</Typography>
+        <Typography>{`${user.firstName} ${user.lastName}`}</Typography>
+        <Typography>{user.email}</Typography>
       </CardContent>
       <CardActions>
-        <IconButton
-          edge='start'
-          color='inherit'
-          aria-label='edit'
-          onClick={toggleModal}
-        >
-          <EditIcon />
-        </IconButton>
+        {userInfo.userId === user.userId && (
+          <IconButton
+            edge='start'
+            color='inherit'
+            aria-label='edit'
+            onClick={toggleModal}
+          >
+            <EditIcon />
+          </IconButton>
+        )}
       </CardActions>
       <Modal
         open={open}

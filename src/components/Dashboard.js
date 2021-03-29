@@ -20,10 +20,11 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    border: '1px solid red',
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: '25%',
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -94,7 +95,7 @@ export default function Dashboard() {
       <Box className={classes.root}>
         {household &&
           household.users.map(user => (
-            <UserCard userInfo={user} key={user.userId} />
+            <UserCard user={user} key={user.userId} />
           ))}
         <Typography>Select Bills</Typography>
         <FormControl variant='outlined' className={classes.formControl}>
