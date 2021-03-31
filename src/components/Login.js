@@ -50,7 +50,7 @@ export default function Login() {
           },
         }
       )
-      .then(async res => {
+      .then(res => {
         localStorage.setItem('token', res.data.access_token);
         setCredentials(initalValues);
         push('/dashboard');

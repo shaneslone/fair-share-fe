@@ -4,6 +4,7 @@ import { useState, useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Box } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,6 +29,7 @@ const initalValues = {
 export default function Signup({ toggleModal }) {
   const classes = useStyles();
   const { userInfo, setUserInfo } = useContext(UserContext);
+  const { push } = useHistory();
 
   const [user, setUser] = useState(
     userInfo ? { ...userInfo, password: '' } : initalValues
@@ -52,7 +54,11 @@ export default function Signup({ toggleModal }) {
     } else {
       axios
         .post('http://localhost:2019/createnewuser', user)
-        .then(res => console.log(res))
+        .then(res => {
+          localStorage.setItem('token', res.data.access_token);
+          setUser(initalValues);
+          push('/household');
+        })
         .catch(err => console.log(err));
     }
   };

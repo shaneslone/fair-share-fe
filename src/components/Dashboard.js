@@ -20,7 +20,6 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    border: '1px solid red',
   },
   formControl: {
     margin: theme.spacing(1),
