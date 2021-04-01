@@ -9,6 +9,7 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -74,6 +75,24 @@ export default function Dashboard() {
     }
   }, [household, currentMonthlyBill]);
 
+  const addMonth = () => {
+    const newMonthlyBill = {
+      household: userInfo.household,
+      date: Date.now(),
+    };
+    axiosWithAuth()
+      .post('/monthlybills/monthlybill', newMonthlyBill)
+      .then(res => {
+        setHousehold({
+          ...household,
+          monthlyBills: [...household.monthlyBills, res.data],
+        });
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  };
+
   const months = [
     'January',
     'February',
@@ -126,6 +145,9 @@ export default function Dashboard() {
               })}
           </Select>
         </FormControl>
+        <Button variant='contained' color='primary' onClick={addMonth}>
+          Add New Month
+        </Button>
         {currentMonthlyBill && <MonthlyBill monthlyBill={currentMonthlyBill} />}
       </Box>
     </HouseholdContext.Provider>
