@@ -62,7 +62,9 @@ export default function Household() {
 
   return (
     <Box className={classes.root}>
-      <Typography>Join an exsisting household, or create your own!</Typography>
+      <Typography>
+        Enter your household key to join an existing household.
+      </Typography>
       <form noValidate autoComplete='off'>
         <Box>
           <TextField
@@ -84,6 +86,7 @@ export default function Household() {
           Submit
         </Button>
       </form>
+      <Typography>Or click below to create a new household.</Typography>
       <Button variant='contained' color='primary' onClick={createNewHousehold}>
         Create New Household
       </Button>
