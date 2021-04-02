@@ -62,37 +62,69 @@ export default function BillForm({
   const onSubmit = e => {
     e.preventDefault();
     const newBill = {
+      billid: billToEdit ? formValues.billid : 0,
       amount: formValues.amount,
       companyName: formValues.companyName.trim(),
-      dueDate: Date.parse(formValues.dueDate),
+      dueDate: Date.parse(formValues.dueDate + ' EST'),
       isPaid: false,
       isRecurring: formValues.isRecurring,
       type: formValues.type,
       website: formValues.website.trim(),
       monthlyBill: currentMonthlyBill,
     };
-    axiosWithAuth()
-      .post('/bills/bill', newBill)
-      .then(res => {
-        setHousehold({
-          ...household,
-          monthlyBills: household.monthlyBills.map(monthlyBill => {
-            if (
-              monthlyBill.monthlybillid === currentMonthlyBill.monthlybillid
-            ) {
-              return {
-                ...monthlyBill,
-                bills: [...monthlyBill.bills, res.data],
-              };
-            }
-            return monthlyBill;
-          }),
+    if (billToEdit) {
+      axiosWithAuth()
+        .patch(`/bills/bill/${newBill.billid}`, newBill)
+        .then(res => {
+          console.log(res.data);
+          setHousehold({
+            ...household,
+            monthlyBills: household.monthlyBills.map(monthlyBill => {
+              if (
+                monthlyBill.monthlybillid === currentMonthlyBill.monthlybillid
+              ) {
+                return {
+                  ...monthlyBill,
+                  bills: monthlyBill.bills.map(bill => {
+                    if (bill.billid === res.data.billid) {
+                      return res.data;
+                    }
+                    return bill;
+                  }),
+                };
+              }
+              return monthlyBill;
+            }),
+          });
+          toggleModal();
+        })
+        .catch(err => {
+          console.log(err.message);
         });
-        toggleModal();
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
+    } else {
+      axiosWithAuth()
+        .post('/bills/bill', newBill)
+        .then(res => {
+          setHousehold({
+            ...household,
+            monthlyBills: household.monthlyBills.map(monthlyBill => {
+              if (
+                monthlyBill.monthlybillid === currentMonthlyBill.monthlybillid
+              ) {
+                return {
+                  ...monthlyBill,
+                  bills: [...monthlyBill.bills, res.data],
+                };
+              }
+              return monthlyBill;
+            }),
+          });
+          toggleModal();
+        })
+        .catch(err => {
+          console.log(err.message);
+        });
+    }
   };
 
   return (

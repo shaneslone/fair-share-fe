@@ -136,7 +136,11 @@ export default function Bill({ bill, currentMonthlyBill }) {
 
   const editBody = (
     <div style={modalStyle} className={classes.paper}>
-      <BillForm billToEdit={bill} />
+      <BillForm
+        billToEdit={bill}
+        currentMonthlyBill={currentMonthlyBill}
+        toggleModal={toggleModal}
+      />
     </div>
   );
 
@@ -166,7 +170,7 @@ export default function Bill({ bill, currentMonthlyBill }) {
           </Link>
           <Typography color='textSecondary'>Amount: ${bill.amount}</Typography>
           <Typography color='textSecondary'>
-            Due: {dueDate.toDateString()}
+            Due: {dueDate.toLocaleDateString('en-US')}
           </Typography>
           <IconButton
             edge='start'
