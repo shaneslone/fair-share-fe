@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { HouseholdContext } from '../context/HouseholdContext.js';
+import BillForm from './forms/BillForm';
 
 import {
   Accordion,
@@ -51,8 +52,12 @@ export default function Bill({ bill, currentMonthlyBill }) {
   const { household, setHousehold } = useContext(HouseholdContext);
   const [modalStyle] = useState(getModalStyle());
   const [open, setOpen] = useState(false);
+  const [modalBodyEdit, setModalBodyEdit] = useState(false);
 
   const toggleModal = () => {
+    if (open) {
+      setModalBodyEdit(false);
+    }
     setOpen(!open);
   };
 
@@ -113,7 +118,7 @@ export default function Bill({ bill, currentMonthlyBill }) {
       });
   };
 
-  const body = (
+  const deleteBody = (
     <div style={modalStyle} className={classes.paper}>
       <Box>
         <Typography>Are you sure you want to delete this bill?</Typography>
@@ -126,6 +131,12 @@ export default function Bill({ bill, currentMonthlyBill }) {
           Confirm Delete
         </Button>
       </Box>
+    </div>
+  );
+
+  const editBody = (
+    <div style={modalStyle} className={classes.paper}>
+      <BillForm billToEdit={bill} />
     </div>
   );
 
@@ -165,7 +176,15 @@ export default function Bill({ bill, currentMonthlyBill }) {
           >
             <DeleteIcon />
           </IconButton>
-          <IconButton edge='start' color='inherit' aria-label='edit'>
+          <IconButton
+            edge='start'
+            color='inherit'
+            aria-label='edit'
+            onClick={() => {
+              setModalBodyEdit(true);
+              toggleModal();
+            }}
+          >
             <EditIcon />
           </IconButton>
         </Box>
@@ -176,7 +195,7 @@ export default function Bill({ bill, currentMonthlyBill }) {
         aria-labelledby='delete bill'
         aria-describedby='delete a new bill'
       >
-        {body}
+        {modalBodyEdit ? editBody : deleteBody}
       </Modal>
     </Accordion>
   );

@@ -80,6 +80,7 @@ export default function Dashboard() {
       household: userInfo.household,
       date: Date.now(),
     };
+
     axiosWithAuth()
       .post('/monthlybills/monthlybill', newMonthlyBill)
       .then(res => {
@@ -115,6 +116,9 @@ export default function Dashboard() {
           household.users.map(user => (
             <UserCard user={user} key={user.userId} />
           ))}
+        <Button variant='contained' color='primary' onClick={addMonth}>
+          Add New Month
+        </Button>
         <Typography>Select Bills</Typography>
         <FormControl variant='outlined' className={classes.formControl}>
           <InputLabel htmlFor='outlined-currentMonth-native-simple'>
@@ -145,9 +149,6 @@ export default function Dashboard() {
               })}
           </Select>
         </FormControl>
-        <Button variant='contained' color='primary' onClick={addMonth}>
-          Add New Month
-        </Button>
         {currentMonthlyBill && <MonthlyBill monthlyBill={currentMonthlyBill} />}
       </Box>
     </HouseholdContext.Provider>
