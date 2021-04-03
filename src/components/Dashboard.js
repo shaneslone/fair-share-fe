@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
+import { useHistory } from 'react-router-dom';
 
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { HouseholdContext } from '../context/HouseholdContext.js';
@@ -37,12 +38,16 @@ export default function Dashboard() {
   const [household, setHousehold] = useState(null);
   const [currentMonth, setCurrentMonth] = useState('');
   const [currentMonthlyBill, setCurrentMonthlyBill] = useState(null);
+  const { push } = useHistory();
 
   useEffect(() => {
     axiosWithAuth()
       .get('users/getuserinfo')
       .then(res => {
         setUserInfo(res.data);
+        if (!res.data.household) {
+          push('/household');
+        }
         return axiosWithAuth().get(
           `households/household/${res.data.household.householdid}`
         );

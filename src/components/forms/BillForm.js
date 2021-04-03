@@ -61,6 +61,7 @@ export default function BillForm({
 
   const onSubmit = e => {
     e.preventDefault();
+
     const newBill = {
       billid: billToEdit ? formValues.billid : 0,
       amount: formValues.amount,
@@ -72,6 +73,7 @@ export default function BillForm({
       website: formValues.website.trim(),
       monthlyBill: currentMonthlyBill,
     };
+
     if (billToEdit) {
       axiosWithAuth()
         .patch(`/bills/bill/${newBill.billid}`, newBill)
