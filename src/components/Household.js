@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Household() {
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const { setUserInfo } = useContext(UserContext);
   const [householdKey, setHouseholdKey] = useState('');
   const { push } = useHistory();
   const classes = useStyles();

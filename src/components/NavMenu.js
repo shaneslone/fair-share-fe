@@ -14,6 +14,8 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import { makeStyles } from '@material-ui/styles';
 import { UserContext } from '../context/UserContext';
 
+import { Link as RouterLink } from 'react-router-dom';
+
 const useStyles = makeStyles(theme => ({
   list: {
     width: 250,
@@ -26,7 +28,7 @@ export default function NavMenu({ toggleDrawer }) {
   const notLoggedIn = () => {
     return (
       <List>
-        <Link href='/signup' color='inherit'>
+        <Link component={RouterLink} to='/signup' color='inherit'>
           <ListItem button>
             <ListItemIcon>
               <PersonAddIcon />
@@ -34,7 +36,7 @@ export default function NavMenu({ toggleDrawer }) {
             <ListItemText primary={'Sign Up'} />
           </ListItem>
         </Link>
-        <Link href='/login' color='inherit'>
+        <Link component={RouterLink} to='/login' color='inherit'>
           <ListItem button>
             <ListItemIcon>
               <VpnKeyIcon />
@@ -49,7 +51,7 @@ export default function NavMenu({ toggleDrawer }) {
   const loggedIn = () => {
     return (
       <List>
-        <Link href='/dashboard' color='inherit'>
+        <Link component={RouterLink} to='/dashboard' color='inherit'>
           <ListItem button>
             <ListItemIcon>
               <DashboardIcon />
@@ -57,7 +59,7 @@ export default function NavMenu({ toggleDrawer }) {
             <ListItemText primary={'Dashboard'} />
           </ListItem>
         </Link>
-        <Link href='/login' color='inherit'>
+        <Link component={RouterLink} to='/login' color='inherit'>
           <ListItem button>
             <ListItemIcon>
               <ExitToAppIcon />

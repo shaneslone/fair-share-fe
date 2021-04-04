@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
 import Household from './components/Household';
+import Home from './components/Home';
 
 import { Grid } from '@material-ui/core';
 
@@ -28,7 +29,7 @@ function App() {
               <Route path='/login' component={Login} />
               <PrivateRoute path='/dashboard' component={Dashboard} />
               <PrivateRoute path='/household' component={Household} />
-              <Route exact path='/' component={Login} />
+              <Route exact path='/' component={Home} />
             </Switch>
           </Grid>
           <Grid item xs={false} sm={2} />

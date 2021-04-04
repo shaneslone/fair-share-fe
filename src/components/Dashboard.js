@@ -19,7 +19,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
 
 import MonthlyBill from './MonthlyBill';
-import UserCard from './UserCard';
+import HouseholdUsers from './HouseholdUsers';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,11 +43,12 @@ const useStyles = makeStyles(theme => ({
 export default function Dashboard() {
   const classes = useStyles();
   const { userInfo, setUserInfo } = useContext(UserContext);
+  const { push } = useHistory();
+
   const [household, setHousehold] = useState(null);
   const [currentMonth, setCurrentMonth] = useState('');
   const [currentMonthlyBill, setCurrentMonthlyBill] = useState(null);
   const [currentMonthlyBillTotal, setCurrentMothlyBillTotal] = useState(0);
-  const { push } = useHistory();
 
   useEffect(() => {
     axiosWithAuth()
@@ -102,8 +103,8 @@ export default function Dashboard() {
       .post('/monthlybills/monthlybill', newMonthlyBill)
       .then(res => {
         setHousehold({
-          ...household,
           monthlyBills: [...household.monthlyBills, res.data],
+          ...household,
         });
       })
       .catch(err => {
@@ -128,6 +129,9 @@ export default function Dashboard() {
 
   return (
     <HouseholdContext.Provider value={{ household, setHousehold }}>
+      {household && (
+        <Typography>Household Key: {household.householdKey}</Typography>
+      )}
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -139,10 +143,7 @@ export default function Dashboard() {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {household &&
-            household.users.map(user => (
-              <UserCard user={user} key={user.userId} />
-            ))}
+          {household && <HouseholdUsers users={household.users} />}
         </AccordionDetails>
       </Accordion>
       <Box className={classes.root}>
