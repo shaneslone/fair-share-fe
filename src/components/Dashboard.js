@@ -14,12 +14,22 @@ import {
   FormControl,
   InputLabel,
   Button,
+  Modal,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
 
 import MonthlyBill from './MonthlyBill';
 import HouseholdUsers from './HouseholdUsers';
+
+function getModalStyle() {
+  return {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+  };
+}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,6 +48,27 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
   },
+  paper: {
+    position: 'absolute',
+    width: '50%',
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  modal: {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+  },
+  householdKey: {
+    textAlign: 'center',
+    marginBottom: theme.spacing(2),
+  },
+  accordion: {
+    margin: theme.spacing(2),
+  },
 }));
 
 export default function Dashboard() {
@@ -49,6 +80,11 @@ export default function Dashboard() {
   const [currentMonth, setCurrentMonth] = useState('');
   const [currentMonthlyBill, setCurrentMonthlyBill] = useState(null);
   const [currentMonthlyBillTotal, setCurrentMothlyBillTotal] = useState(0);
+  const [modalStyle] = useState(getModalStyle());
+  const [open, setOpen] = useState(false);
+  const toggleModal = () => {
+    setOpen(!open);
+  };
 
   useEffect(() => {
     axiosWithAuth()
@@ -114,15 +150,21 @@ export default function Dashboard() {
     axiosWithAuth()
       .post('/monthlybills/monthlybill', newMonthlyBill)
       .then(res => {
-        console.log(res.data);
         setHousehold({
           ...household,
           monthlyBills: [res.data, ...household.monthlyBills],
         });
+        toggleModal();
       })
       .catch(err => {
         console.log(err.message);
       });
+  };
+
+  const deleteMonth = () => {
+    axiosWithAuth().delete(
+      `/monthlybills/monthlybill/${currentMonthlyBill.monthlybillid}`
+    );
   };
 
   const months = [
@@ -140,12 +182,23 @@ export default function Dashboard() {
     'December',
   ];
 
+  const body = (
+    <div style={modalStyle} className={classes.paper}>
+      <Typography>
+        New month of bills added! Edit bills to update new ammounts and due
+        dates!
+      </Typography>
+    </div>
+  );
+
   return (
     <HouseholdContext.Provider value={{ household, setHousehold }}>
       {household && (
-        <Typography>Household Key: {household.householdKey}</Typography>
+        <Typography className={classes.householdKey}>
+          Household Key: {household.householdKey}
+        </Typography>
       )}
-      <Accordion>
+      <Accordion className={classes.accordion}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls='panel1a-content'
@@ -203,6 +256,17 @@ export default function Dashboard() {
         )}
         {currentMonthlyBill && <MonthlyBill monthlyBill={currentMonthlyBill} />}
       </Box>
+      <Modal
+        open={open}
+        onClose={toggleModal}
+        aria-labelledby='monthly bills added'
+        aria-describedby='added a new month of bills'
+      >
+        {body}
+      </Modal>
+      <Button variant='contained' color='primary' onClick={deleteMonth}>
+        Delete Month
+      </Button>
     </HouseholdContext.Provider>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useLocation } from 'react-router-dom';
 import { UserContext } from './context/UserContext';
 
 import PrivateRoute from './components/PrivateRoute';
@@ -14,6 +14,8 @@ import { Grid } from '@material-ui/core';
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
+  const location = useLocation();
+  console.log(location);
 
   return (
     <UserContext.Provider value={{ userInfo, setUserInfo }}>
@@ -22,7 +24,7 @@ function App() {
           <Header />
         </Grid>
         <Grid item container>
-          <Grid item xs={false} sm={2} />
+          <Grid item xs={false} sm={location.pathname === '/' ? false : 2} />
           <Grid item xs={12} sm={8}>
             <Switch>
               <Route path='/signup' component={Signup} />
@@ -32,7 +34,7 @@ function App() {
               <Route exact path='/' component={Home} />
             </Switch>
           </Grid>
-          <Grid item xs={false} sm={2} />
+          <Grid item xs={false} sm={location.pathname === '/' ? false : 2} />
         </Grid>
       </Grid>
     </UserContext.Provider>
