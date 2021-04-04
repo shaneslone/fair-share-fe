@@ -5,6 +5,9 @@ import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { HouseholdContext } from '../context/HouseholdContext.js';
 import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Box,
   Typography,
   Select,
@@ -12,6 +15,7 @@ import {
   InputLabel,
   Button,
 } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
 
 import MonthlyBill from './MonthlyBill';
@@ -30,6 +34,10 @@ const useStyles = makeStyles(theme => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
 }));
 
 export default function Dashboard() {
@@ -38,6 +46,7 @@ export default function Dashboard() {
   const [household, setHousehold] = useState(null);
   const [currentMonth, setCurrentMonth] = useState('');
   const [currentMonthlyBill, setCurrentMonthlyBill] = useState(null);
+  const [currentMonthlyBillTotal, setCurrentMothlyBillTotal] = useState(0);
   const { push } = useHistory();
 
   useEffect(() => {
@@ -58,7 +67,7 @@ export default function Dashboard() {
       .catch(err => {
         console.log(err.message);
       });
-  }, [setUserInfo]);
+  }, [setUserInfo, push]);
 
   const handleChange = e => {
     setCurrentMonth(e.target.value);
@@ -76,6 +85,9 @@ export default function Dashboard() {
           monthlyBill =>
             monthlyBill.monthlybillid === currentMonthlyBill.monthlybillid
         )[0]
+      );
+      setCurrentMothlyBillTotal(
+        currentMonthlyBill.bills.reduce((total, bill) => total + bill.amount, 0)
       );
     }
   }, [household, currentMonthlyBill]);
@@ -116,11 +128,24 @@ export default function Dashboard() {
 
   return (
     <HouseholdContext.Provider value={{ household, setHousehold }}>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls='panel1a-content'
+          id='panel1a-header'
+        >
+          <Typography className={classes.heading}>
+            Household Memebers
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          {household &&
+            household.users.map(user => (
+              <UserCard user={user} key={user.userId} />
+            ))}
+        </AccordionDetails>
+      </Accordion>
       <Box className={classes.root}>
-        {household &&
-          household.users.map(user => (
-            <UserCard user={user} key={user.userId} />
-          ))}
         <Button variant='contained' color='primary' onClick={addMonth}>
           Add New Month
         </Button>
@@ -154,6 +179,14 @@ export default function Dashboard() {
               })}
           </Select>
         </FormControl>
+        {currentMonthlyBill && (
+          <Box>
+            <Typography>Total Bills: ${currentMonthlyBillTotal}</Typography>
+            <Typography>
+              Your Share: ${currentMonthlyBillTotal / household.users.length}
+            </Typography>
+          </Box>
+        )}
         {currentMonthlyBill && <MonthlyBill monthlyBill={currentMonthlyBill} />}
       </Box>
     </HouseholdContext.Provider>

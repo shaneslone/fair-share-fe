@@ -10,6 +10,7 @@ import {
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import { makeStyles } from '@material-ui/styles';
 import { UserContext } from '../context/UserContext';
 
@@ -48,6 +49,14 @@ export default function NavMenu({ toggleDrawer }) {
   const loggedIn = () => {
     return (
       <List>
+        <Link href='/dashboard' color='inherit'>
+          <ListItem button>
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Dashboard'} />
+          </ListItem>
+        </Link>
         <Link href='/login' color='inherit'>
           <ListItem button>
             <ListItemIcon>
