@@ -94,17 +94,30 @@ export default function Dashboard() {
   }, [household, currentMonthlyBill]);
 
   const addMonth = () => {
+    const lastMonth = household.monthlyBills.sort((a, b) => b.date - a.date)[0];
     const newMonthlyBill = {
       household: userInfo.household,
       date: Date.now(),
+      bills: lastMonth.bills.map(bill => {
+        return {
+          type: bill.type,
+          companyName: bill.companyName,
+          amount: bill.isRecurring ? bill.amount : 0,
+          isRecurring: bill.isRecurring,
+          dueDate: Date.now(),
+          isPaid: false,
+          website: bill.website,
+        };
+      }),
     };
 
     axiosWithAuth()
       .post('/monthlybills/monthlybill', newMonthlyBill)
       .then(res => {
+        console.log(res.data);
         setHousehold({
-          monthlyBills: [...household.monthlyBills, res.data],
           ...household,
+          monthlyBills: [res.data, ...household.monthlyBills],
         });
       })
       .catch(err => {

@@ -14,8 +14,8 @@ export default function HouseholdUsers({ users }) {
   return (
     <Grid item container>
       {users.map(user => (
-        <Grid item xs={12} sm={5} className={classes.root}>
-          <UserCard user={user} key={user.userId} />
+        <Grid item xs={12} sm={5} className={classes.root} key={user.userId}>
+          <UserCard user={user} />
         </Grid>
       ))}
     </Grid>
