@@ -194,15 +194,15 @@ export default function Dashboard() {
   return (
     <HouseholdContext.Provider value={{ household, setHousehold }}>
       {household && (
-        <Typography className={classes.householdKey}>
+        <Typography variant='h6' align='center' gutterBottom>
           Household Key: {household.householdKey}
         </Typography>
       )}
-      <Accordion className={classes.accordion}>
+      <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls='panel1a-content'
-          id='panel1a-header'
+          aria-controls='household-members'
+          id='household-members'
         >
           <Typography className={classes.heading}>
             Household Memebers

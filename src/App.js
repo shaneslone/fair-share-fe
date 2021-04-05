@@ -10,7 +10,15 @@ import Dashboard from './components/Dashboard';
 import Household from './components/Household';
 import Home from './components/Home';
 
-import { Grid } from '@material-ui/core';
+import {
+  Grid,
+  createMuiTheme,
+  responsiveFontSizes,
+  MuiThemeProvider,
+} from '@material-ui/core';
+
+let theme = createMuiTheme();
+theme = responsiveFontSizes(theme);
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
@@ -19,24 +27,26 @@ function App() {
 
   return (
     <UserContext.Provider value={{ userInfo, setUserInfo }}>
-      <Grid container direction='column'>
-        <Grid item>
-          <Header />
-        </Grid>
-        <Grid item container>
-          <Grid item xs={false} sm={location.pathname === '/' ? false : 2} />
-          <Grid item xs={12} sm={8}>
-            <Switch>
-              <Route path='/signup' component={Signup} />
-              <Route path='/login' component={Login} />
-              <PrivateRoute path='/dashboard' component={Dashboard} />
-              <PrivateRoute path='/household' component={Household} />
-              <Route exact path='/' component={Home} />
-            </Switch>
+      <MuiThemeProvider theme={theme}>
+        <Grid container direction='column'>
+          <Grid item>
+            <Header />
           </Grid>
-          <Grid item xs={false} sm={location.pathname === '/' ? false : 2} />
+          <Grid item container>
+            <Grid item xs={false} sm={location.pathname === '/' ? false : 2} />
+            <Grid item xs={12} sm={8}>
+              <Switch>
+                <Route path='/signup' component={Signup} />
+                <Route path='/login' component={Login} />
+                <PrivateRoute path='/dashboard' component={Dashboard} />
+                <PrivateRoute path='/household' component={Household} />
+                <Route exact path='/' component={Home} />
+              </Switch>
+            </Grid>
+            <Grid item xs={false} sm={location.pathname === '/' ? false : 2} />
+          </Grid>
         </Grid>
-      </Grid>
+      </MuiThemeProvider>
     </UserContext.Provider>
   );
 }

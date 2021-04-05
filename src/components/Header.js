@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Link } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import NavMenu from './NavMenu';
+import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   typographyStyles: {
@@ -30,9 +31,14 @@ export default function Header() {
   return (
     <AppBar position='static'>
       <Toolbar>
-        <Typography className={classes.typographyStyles} component='h1'>
-          Fair Share
-        </Typography>
+        <Link
+          component={RouterLink}
+          to='/'
+          color='inherit'
+          className={classes.typographyStyles}
+        >
+          <Typography component='h1'>Fair Share</Typography>
+        </Link>
         <IconButton
           edge='start'
           color='inherit'
