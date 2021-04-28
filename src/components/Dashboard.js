@@ -162,9 +162,17 @@ export default function Dashboard() {
   };
 
   const deleteMonth = () => {
-    axiosWithAuth().delete(
-      `/monthlybills/monthlybill/${currentMonthlyBill.monthlybillid}`
-    );
+    axiosWithAuth()
+      .delete(`/monthlybills/monthlybill/${currentMonthlyBill.monthlybillid}`)
+      .then(() => {
+        setHousehold({
+          ...household,
+          monthlyBills: household.monthlyBills.filter(
+            monthlyBill =>
+              monthlyBill.monthlybillid != currentMonthlyBill.monthlybillid
+          ),
+        });
+      });
   };
 
   const months = [
@@ -198,6 +206,7 @@ export default function Dashboard() {
           Household Key: {household.householdKey}
         </Typography>
       )}
+
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -212,6 +221,7 @@ export default function Dashboard() {
           {household && <HouseholdUsers users={household.users} />}
         </AccordionDetails>
       </Accordion>
+
       <Box className={classes.root}>
         <Button variant='contained' color='primary' onClick={addMonth}>
           Add New Month
@@ -256,6 +266,7 @@ export default function Dashboard() {
         )}
         {currentMonthlyBill && <MonthlyBill monthlyBill={currentMonthlyBill} />}
       </Box>
+
       <Modal
         open={open}
         onClose={toggleModal}
@@ -264,7 +275,7 @@ export default function Dashboard() {
       >
         {body}
       </Modal>
-      <Button variant='contained' color='primary' onClick={deleteMonth}>
+      <Button variant='contained' color='secondary' onClick={deleteMonth}>
         Delete Month
       </Button>
     </HouseholdContext.Provider>
